@@ -1,7 +1,8 @@
 package models
 
 import (
-	"github.com/andikanugraha11/rest-api-jwt/helpers"
+	"Mygram/helpers"
+
 	"github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
 )
@@ -13,6 +14,7 @@ type User struct {
 	Password string  `gorm:"not null" json:"password" form:"password" valid:"required,minstringlength(8)~Password minimal 8 character"`
 	Age      int     `gorm:"not null" json:"age" form:"age" valid:"required,minstringlength(8)~Age minimal 8 character"`
 	Photos   []Photo `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"photos"`
+	FullName string
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {

@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	database "github.com/andikanugraha11/rest-api-jwt/databases"
-	"github.com/andikanugraha11/rest-api-jwt/helpers"
-	"github.com/andikanugraha11/rest-api-jwt/models"
-	"github.com/gin-gonic/gin"
+	database "Mygram/databases"
+	"Mygram/helpers"
+	"Mygram/models"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func UserRegistration(c *gin.Context) {
@@ -17,7 +18,7 @@ func UserRegistration(c *gin.Context) {
 
 	if ct == "application/json" {
 		_ = c.ShouldBindJSON(&User)
-	}else {
+	} else {
 		_ = c.ShouldBind(&User)
 	}
 
@@ -47,7 +48,7 @@ func UserLogin(c *gin.Context) {
 
 	if ct == "application/json" {
 		_ = c.ShouldBindJSON(&User)
-	}else {
+	} else {
 		_ = c.ShouldBind(&User)
 	}
 
@@ -61,7 +62,6 @@ func UserLogin(c *gin.Context) {
 		})
 		return
 	}
-
 
 	comparePass := helpers.ComparePassword([]byte(User.Password), []byte(password))
 

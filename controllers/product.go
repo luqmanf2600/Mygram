@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	database "github.com/andikanugraha11/rest-api-jwt/databases"
-	"github.com/andikanugraha11/rest-api-jwt/helpers"
-	"github.com/andikanugraha11/rest-api-jwt/models"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
+	database "Mygram/databases"
+	"Mygram/helpers"
+	"Mygram/models"
 	"net/http"
 	"strconv"
-)
 
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
+)
 
 func CreateProduct(c *gin.Context) {
 	db := database.GetDB()
@@ -20,7 +20,7 @@ func CreateProduct(c *gin.Context) {
 
 	if ct == "application/json" {
 		_ = c.ShouldBindJSON(&Product)
-	}else {
+	} else {
 		_ = c.ShouldBind(&Product)
 	}
 
@@ -42,7 +42,7 @@ func CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, Product)
 }
 
-func UpdateProduct(c *gin.Context){
+func UpdateProduct(c *gin.Context) {
 	db := database.GetDB()
 	ct := helpers.GetContentType(c)
 	userData := c.MustGet("user_data").(jwt.MapClaims)
@@ -53,7 +53,7 @@ func UpdateProduct(c *gin.Context){
 
 	if ct == "application/json" {
 		c.ShouldBindJSON(&Product)
-	}else{
+	} else {
 		c.ShouldBind(&Product)
 	}
 
@@ -67,7 +67,7 @@ func UpdateProduct(c *gin.Context){
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Bad Request",
+			"error":   "Bad Request",
 			"message": err.Error(),
 		})
 		return

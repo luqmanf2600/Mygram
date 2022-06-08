@@ -1,13 +1,14 @@
 package middlewares
 
 import (
-	database "github.com/andikanugraha11/rest-api-jwt/databases"
-	"github.com/andikanugraha11/rest-api-jwt/helpers"
-	"github.com/andikanugraha11/rest-api-jwt/models"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
+	database "Mygram/databases"
+	"Mygram/helpers"
+	"Mygram/models"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 func Authentication() gin.HandlerFunc {
@@ -16,7 +17,7 @@ func Authentication() gin.HandlerFunc {
 
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"error": "unauthorized",
+				"error":   "unauthorized",
 				"message": err.Error(),
 			})
 		}
@@ -33,7 +34,7 @@ func Authorization() gin.HandlerFunc {
 
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"error": "Bad Request",
+				"error":   "Bad Request",
 				"message": "Invalid Parameter",
 			})
 			return
@@ -47,7 +48,7 @@ func Authorization() gin.HandlerFunc {
 
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-				"error": "data Not Found",
+				"error":   "data Not Found",
 				"message": "data doesn't exist",
 			})
 			return
@@ -55,7 +56,7 @@ func Authorization() gin.HandlerFunc {
 
 		if Product.UserId != userId {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"error": "unauthorized",
+				"error":   "unauthorized",
 				"message": "don't have access",
 			})
 			return

@@ -1,8 +1,8 @@
 package database
 
 import (
+	"Mygram/models"
 	"fmt"
-	"github.com/andikanugraha11/rest-api-jwt/models"
 	"log"
 
 	"gorm.io/driver/postgres"

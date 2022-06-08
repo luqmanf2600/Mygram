@@ -1,4 +1,4 @@
-module github.com/andikanugraha11/rest-api-jwt
+module Mygram
 
 go 1.15
 
