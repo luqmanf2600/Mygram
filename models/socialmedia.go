@@ -7,3 +7,8 @@ type Socialmedia struct {
 	UserId         uint
 	User           *User
 }
+
+type RequestSocialMedia struct {
+	Name           string `json:"name" form:"name" valid:"required"`
+	SocialMediaUrl string `json:"social_media_url" form:"social_medial_url" valid:"required"`
+}

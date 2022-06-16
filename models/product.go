@@ -7,8 +7,3 @@ type Product struct {
 	UserId      uint
 	User        *User
 }
-
-// beforeCreate
-
-
-// beforeUpdate

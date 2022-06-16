@@ -15,20 +15,33 @@ func InitApplication() *gin.Engine {
 	{
 		userGroup.POST("/register", controllers.UserRegistration)
 		userGroup.POST("/login", controllers.UserLogin)
-		userGroup.PUT("/login", controllers.UserLogin)
-		userGroup.DELETE("/login", controllers.UserLogin)
-	}
-
-	productGroup := r.Group("/product")
-	{
-		productGroup.Use(middlewares.Authentication())
-		productGroup.POST("/", controllers.CreateProduct)
-		productGroup.POST("/:productId", middlewares.Authorization(), controllers.UpdateProduct)
+		userGroup.PUT("/", middlewares.Authentication(), controllers.UserUpdate)
+		userGroup.DELETE("/", middlewares.Authentication(), controllers.UserDelete)
 	}
 
 	commentGroup := r.Group("/comment")
 	{
-		commentGroup.GET("/:id", controllers.GetCommentByID)
+		commentGroup.POST("/", controllers.PostCommentByID)
+		commentGroup.GET("/", controllers.GetCommentByID)
+		commentGroup.PUT("/:commentId", controllers.UpdateCommentByID)
+		commentGroup.DELETE("/:commentId", controllers.DeleteCommentByID)
+	}
+
+	photoGroup := r.Group("/photo")
+	{
+		photoGroup.POST("/", controllers.PostPhotoByID)
+		photoGroup.GET("/", controllers.ReadPhotoByID)
+		photoGroup.GET("/:photoId", controllers.ReadAllPhotoByID)
+		photoGroup.PUT("/:photoId", controllers.UpdatePhotoByID)
+		photoGroup.DELETE("/:photoId", controllers.DeletePhotoByID)
+	}
+
+	socialmediaGroup := r.Group("/socialmedia")
+	{
+		socialmediaGroup.POST("/", controllers.PostSocialmediaByID)
+		socialmediaGroup.GET("/", controllers.GetSocialmediaByID)
+		socialmediaGroup.PUT("/:socialmediaId", controllers.UpdateSocialmediaByID)
+		socialmediaGroup.DELETE("/:socialmediaId", controllers.DeleteSocialmediaByID)
 	}
 
 	return r

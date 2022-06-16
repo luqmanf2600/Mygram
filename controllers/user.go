@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 func UserRegistration(c *gin.Context) {
@@ -79,4 +80,78 @@ func UserLogin(c *gin.Context) {
 		"token": token,
 	})
 
+}
+
+func UserUpdate(c *gin.Context) {
+	db := database.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := helpers.GetContentType(c)
+	_, _ = db, contentType
+	User := models.User{}
+	UserID := uint(userData["id"].(float64))
+
+	db.Where("id = ?", UserID).First(&User)
+
+	if contentType == appJSON {
+		c.ShouldBindJSON(&User)
+	} else {
+		c.ShouldBind(&User)
+	}
+
+	User.ID = UserID
+
+	_, errUpdate := govalidator.ValidateStruct(User)
+
+	if errUpdate != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+
+			"error":   "Update Not Valid",
+			"message": errUpdate,
+		})
+		return
+	}
+
+	err := db.Debug().Model(&User).Updates(models.User{Email: User.Email, Username: User.Username}).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"data": gin.H{
+			"id":         User.ID,
+			"age":        User.Age,
+			"email":      User.Email,
+			"password":   User.Password,
+			"username":   User.Username,
+			"updated_at": User.UpdatedAt,
+		},
+	})
+}
+
+func UserDelete(c *gin.Context) {
+	db := database.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := helpers.GetContentType(c)
+	_, _ = db, contentType
+	User := models.User{}
+	UserID := uint(userData["id"].(float64))
+
+	err := db.Where("id = ?", UserID).Delete(&User).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"data":   gin.H{"message": "Your account has been successfully deleted"},
+	})
 }
